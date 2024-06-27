@@ -1,0 +1,172 @@
+<?xml version="1.0" ?>
+
+<robot name="cf2">
+<!-- ロボットに関するプロパティ 
+arm: ローターアームの長さ 0.0397
+kf：ローターのトルクのスラスト定数
+thrust2weight:ロボット重量に対する総推力の比 高い値はより強力な浮揚能力を示す
+max_speed_kmh:ロボットの最大速度　km/h\
+gnd_eff_coeff:地上効果係数
+prop_radius:プロペラの半径
+drag_coeff_xy:XY平面での抗力係数　空気抵抗
+drag_coeff_z:Z軸方向での抗力係数　上下方向の空気抵抗
+dw_coeff_1,dw_coeff_2,dw_coeff_3　: ドラッグウェイト係数　空気力学的な特性-->
+  <properties arm="0.0397" kf="3.16e-10" km="7.94e-12" thrust2weight="2.25" max_speed_kmh="30" gnd_eff_coeff="11.36859" prop_radius="2.31348e-2" drag_coeff_xy="9.1785e-7" drag_coeff_z="10.311e-7" dw_coeff_1="2267.18" dw_coeff_2=".16" dw_coeff_3="-.11" />
+
+  <link name="base_link"> 
+
+    <inertial> <!--リンクの慣性特性-->
+      <origin rpy="0 0 0" xyz="0 0 0"/><!-- rpy=角度0 -->
+      <mass value="0.027"/><!-- 0.249 -->
+      <inertia ixx="1.4e-5" ixy="0.0" ixz="0.0" iyy="1.4e-5" iyz="0.0" izz="2.17e-5"/><!-- リンクの慣性行列-->
+    </inertial>
+
+    <!-- links>
+      <carlos url="https://arxiv.org/pdf/1608.05786.pdf" />
+      <julian url="http://mikehamer.info/assets/papers/Crazyflie%20Modelling.pdf" />
+      <mit url="http://groups.csail.mit.edu/robotics-center/public_papers/Landry15.pdf" />
+    </links -->
+
+    <visual><!-- 可視化のための基準点-->
+      <origin rpy="0 0 55" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="./cf2.dae" scale=" 1 1 1"/><!--3Dモデルのファイル名、スケール-->
+      </geometry> 
+      <material name="grey">
+        <color rgba=".5 .5 .5 1"/><!-- RGBA形式の色情報-->
+      </material> 
+    </visual>
+
+    <collision><!--ロボットの衝突検出に使用されるジオメトリとその位置-->
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius=".06" length=".025"/>
+      </geometry>
+    </collision>  
+
+  </link>
+
+  <link name="prop0_link">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.028 0.028 0"/>
+      <mass value="0"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <collision>
+      <origin rpy="0 0 0" xyz="0.028 0.028 0"/>
+      <geometry>
+          <cylinder radius="0.1" length="0.1"/>
+          <!-- Specify the collision geometry for prop0_link -->
+      </geometry>
+    </collision>
+  </link>
+  <joint name="prop0_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="prop0_link"/>
+  </joint>
+
+  <link name="prop1_link">
+    <inertial>
+      <origin rpy="0 0 0" xyz="-0.028 0.028 0"/>
+      <mass value="0"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <collision>
+      <origin rpy="0 0 0" xyz="-0.028 0.028 0"/>
+      <geometry>
+          <cylinder radius="0.1" length="0.1"/>
+          <!-- Specify the collision geometry for prop0_link -->
+      </geometry>
+    </collision>
+  </link>
+  <joint name="prop1_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="prop1_link"/>
+  </joint>
+
+  <link name="prop2_link">
+    <inertial>
+      <origin rpy="0 0 0" xyz="-0.028 -0.028 0"/>
+      <mass value="0"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <collision>
+      <origin rpy="0 0 0" xyz="-0.028 -0.028 0"/>
+      <geometry>
+          <cylinder radius="0.1" length="0.1"/>
+          <!-- Specify the collision geometry for prop0_link -->
+      </geometry>
+    </collision>
+  </link>
+  <joint name="prop2_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="prop2_link"/>
+  </joint>
+
+  <link name="prop3_link">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.028 -0.028 0"/>
+      <mass value="0"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <collision>
+      <origin rpy="0 0 0" xyz="0.028 -0.028 0"/>
+      <geometry>
+          <cylinder radius="0.1" length="0.1"/>
+          <!-- Specify the collision geometry for prop0_link -->
+      </geometry>
+    </collision>
+  </link>
+  <joint name="prop3_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="prop3_link"/>
+  </joint>
+
+<!--刷毛のプロパティ-->
+  <link name="brush_link">
+    <inertial><!--リンクの慣性特性-->
+      <mass value="0"/><!--質量 0.001-->
+      <origin rpy="0 0 0" xyz="0 0 0"/><!--慣性フレームの原点-->
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/><!--慣性テンソル-->
+    </inertial>
+
+    <visual>
+      <origin rpy="80 0 164.9" xyz="0 0 0"/><!--視覚フレームの原点-->
+      <geometry>
+        <cylinder length="0.1" radius="0.002"/>
+      </geometry>
+      <material name="brush_color">
+        <color rgba="0.1 0.8 0.1 1"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.02"/><!--ジョイントフレームの原点-->
+      <geometry>
+        <cylinder length="0.2" radius="0.02"/>
+      </geometry>
+    </collision>
+
+  </link>
+
+  <joint name="brush_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="-0.1 0 0"/>
+    <parent link="base_link"/>
+    <child link="brush_link"/>
+  </joint>
+
+<!-- 質量中心-->
+  <link name="center_of_mass_link">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="center_of_mass_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="center_of_mass_link"/>
+  </joint>
+
+</robot>
+

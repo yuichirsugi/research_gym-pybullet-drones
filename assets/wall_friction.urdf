@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+
+<robot name="wall">
+  <link name="wall_link">
+    <visual>
+      <geometry>
+        <box size="0.1 2 1"/>
+      </geometry>
+      <material name="wall_color">
+        <!-- <color rgba="0.5 0.5 0.5 1"/> -->
+        <color rgba="0.957 0.839 0.655 1.0"/> <!-- ベージュ RGBA（Red, Green, Blue, Alpha） -->
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.1 2 1"/>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>1.0</mu> <!-- 静止摩擦係数 init : 0.5--> 
+            <mu2>1.0</mu2> <!-- 動摩擦係数 init : 0.5-->
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+  </link>
+</robot>
